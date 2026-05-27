@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Repertório</title>
+<title>Repertório AVV Natal</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
@@ -88,7 +88,7 @@
 .poster{
     width:900px;
     min-height:1300px;
-    background:radial-gradient(circle at top,#7c3aed,#0f172a 60%);
+    background: radial-gradient(circle at top,#facc15,#0f172a 60%);
     border-radius:30px;
     overflow:hidden; /* <- MUITO IMPORTANTE */
 }
@@ -192,7 +192,7 @@ textarea{
 .poster{
     width:900px;
     min-height:1300px;
-    background:radial-gradient(circle at top,#7c3aed,#0f172a 60%);
+   background: radial-gradient(circle at top,#facc15,#0f172a 60%);
     border-radius:30px;
     overflow:hidden;
 }
@@ -341,7 +341,7 @@ padding:15px;
 <!-- PAINEL -->
 <div class="panel">
 
-<h2>GERADOR DE REPERTÓRIO</h2>
+<h2>REPERTÓRIO AVV NATAL</h2>
 <div style="display:flex;gap:6px;margin-top:15px;">
     <button class="slot-btn" onclick="carregarSlot(0)">1</button>
     <button class="slot-btn" onclick="carregarSlot(1)">2</button>
@@ -353,9 +353,7 @@ padding:15px;
 </div>
 <label>Grupo</label>
 <select id="grupo">
-<option>G1</option>
-<option>G2</option>
-<option>G3</option>
+<option>AVV</option>
 </select>
 
 <label>Dia</label>
@@ -458,7 +456,7 @@ GERAR CARTAZ
 <div class="poster-content">
 
 <div class="top">
-<div class="logo" id="posterGrupo">G1</div>
+<div class="logo" id="posterGrupo">AVV</div>
 
 <div>
 <div class="date-day" id="posterDia">26</div>
@@ -701,8 +699,7 @@ function gerarSecao(inputId, posterId, secaoId){
 
     });
 
-    secao.style.display =
-        possuiMusica ? "block" : "none";
+    secao.style.display = "block";
 }
 
 async function compartilharPNG(){
@@ -713,6 +710,9 @@ async function compartilharPNG(){
 
     const element =
     document.querySelector(".poster-area #poster");
+    document.querySelectorAll(".secao-conteudo").forEach(el => {
+    el.style.display = "block";
+});
     const canvas = await html2canvas(element, {
         scale: 3,
         useCORS: true,
