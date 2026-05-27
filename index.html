@@ -1,4 +1,4 @@
-
+  
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Repertório AVV Natal</title>
+<title>Gerador de Repertório</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
@@ -341,7 +341,7 @@ padding:15px;
 <!-- PAINEL -->
 <div class="panel">
 
-<h2>Repertório AVV Natal</h2>
+<h2>GERADOR DE REPERTÓRIO</h2>
 <div style="display:flex;gap:6px;margin-top:15px;">
     <button class="slot-btn" onclick="carregarSlot(0)">1</button>
     <button class="slot-btn" onclick="carregarSlot(1)">2</button>
@@ -354,6 +354,8 @@ padding:15px;
 <label>Grupo</label>
 <select id="grupo">
 <option>AVV</option>
+<option>Avv</option>
+<option>AvA</option>
 </select>
 
 <label>Dia</label>
@@ -441,9 +443,24 @@ CEIA
 GERAR CARTAZ
 </button>
 
-<div class="downloads">
-<button class="png" onclick="compartilharPNG()">Compartilhar PNG</button>
-<button class="pdf" onclick="compartilharPDF()">Compartilhar PDF</button>
+<div class="downloads" style="flex-wrap:wrap;">
+    
+    <button class="png" onclick="compartilharPNG()">
+        Compartilhar PNG
+    </button>
+
+    <button class="png" onclick="baixarPNG()">
+        Baixar PNG
+    </button>
+
+    <button class="pdf" onclick="compartilharPDF()">
+        Compartilhar PDF
+    </button>
+
+    <button class="pdf" onclick="baixarPDF()">
+        Baixar PDF
+    </button>
+
 </div>
 
 </div>
@@ -528,6 +545,35 @@ addMusica('ofertaInputs');
 addMusica('entregaInputs');
 addMusica('distribuicaoInputs');
 addMusica('ceiaInputs');
+
+async function baixarPNG(){
+
+    const grupo = document.getElementById("grupo").value;
+    const dia = document.getElementById("dia").value || new Date().getDate();
+
+    const nomeArquivo = `${grupo} repertorio dia ${dia}.png`;
+
+    const element =
+        document.querySelector(".poster-area #poster");
+
+    const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: null
+    });
+
+    canvas.toBlob((blob) => {
+
+        const link = document.createElement("a");
+
+        link.download = nomeArquivo;
+        link.href = URL.createObjectURL(blob);
+
+        link.click();
+
+    }, "image/png");
+
+}
 
 function gerarCartaz(){
 
