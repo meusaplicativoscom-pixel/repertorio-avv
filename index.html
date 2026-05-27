@@ -1,0 +1,1128 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#000000">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Repertório</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- PDF CORRETO (COM LINKS CLICÁVEIS) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+.secao-btn{
+    width:100%;
+    margin-top:15px;
+    border:none;
+    background:#374151;
+    color:white;
+    padding:16px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    text-align:left;
+    transition:.2s;
+}
+
+.secao-btn:hover{
+    background:#4b5563;
+}
+
+.secao-conteudo{
+    display:none;
+    margin-top:10px;
+    padding:10px;
+    background:#111827;
+    border-radius:15px;
+}
+#previewContent .poster{
+    max-width:100%;
+    width:900px;
+}
+
+@media(max-width:900px){
+
+    #previewContent .poster{
+        width:100%;
+        min-height:auto;
+    }
+
+    #previewContent .poster-content{
+        padding:20px;
+    }
+
+    #previewContent .date-day{
+        font-size:48px;
+    }
+
+    #previewContent .logo{
+        font-size:36px;
+    }
+
+}
+.yt-icon{
+    display:inline-flex;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:#dc2626;
+    color:white;
+    font-size:12px;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    margin-left:10px;
+    opacity:0.85;
+}
+
+.yt-icon:hover{
+    opacity:1;
+    transform:scale(1.1);
+}
+.poster{
+    width:900px;
+    min-height:1300px;
+    background:radial-gradient(circle at top,#7c3aed,#0f172a 60%);
+    border-radius:30px;
+    overflow:hidden; /* <- MUITO IMPORTANTE */
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Montserrat',sans-serif;
+    background:#0f172a;
+    color:white;
+    padding:30px;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+.panel{
+    background:#111827;
+    padding:25px;
+    border-radius:25px;
+}
+
+.panel h2{
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:8px;
+    font-size:14px;
+    opacity:.8;
+}
+
+input, textarea, select{
+    width:100%;
+    border:none;
+    border-radius:12px;
+    background:#1f2937;
+    color:white;
+    padding:14px;
+}
+
+textarea{
+    height:120px;
+    resize:none;
+}
+
+.music-block{
+    background:#1f2937;
+    padding:15px;
+    border-radius:15px;
+    margin-top:15px;
+}
+
+.add-btn{
+    margin-top:15px;
+    width:100%;
+    border:none;
+    background:#2563eb;
+    color:white;
+    padding:14px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.downloads{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.downloads button{
+    flex:1;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    color:white;
+}
+
+.png{background:#059669;}
+.pdf{background:#dc2626;}
+
+.poster-area{
+    display:flex;
+    justify-content:center;
+}
+
+.poster{
+    width:900px;
+    min-height:1300px;
+    background:radial-gradient(circle at top,#7c3aed,#0f172a 60%);
+    border-radius:30px;
+    overflow:hidden;
+}
+
+.poster-content{
+    padding:60px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:50px;
+}
+
+.logo{
+    font-size:54px;
+    font-weight:800;
+}
+
+.date-day{
+    font-size:72px;
+    font-weight:800;
+}
+
+.section-title{
+    font-size:22px;
+    margin:30px 0 15px;
+    border-bottom:1px solid rgba(255,255,255,.2);
+    padding-bottom:10px;
+}
+
+.song{
+    background:rgba(255,255,255,.05);
+    padding:20px;
+    border-radius:18px;
+    margin-bottom:15px;
+}
+
+.song-name{
+    font-size:22px;
+    font-weight:700;
+}
+
+.song-meta{
+    opacity:.8;
+    margin-top:5px;
+}
+
+.youtube-btn{
+    margin-top:10px;
+    display:inline-block;
+    background:#dc2626;
+    padding:8px 14px;
+    border-radius:10px;
+    color:white;
+    text-decoration:none;
+    font-weight:700;
+    font-size:13px;
+}
+
+.extra{
+    margin-top:40px;
+    padding:20px;
+    background:rgba(255,255,255,.05);
+    border-radius:20px;
+}
+.song{
+    position: relative;
+}
+
+.yt-icon{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+.song-link{
+    display:block;
+    text-decoration:none;
+    color:white;
+    transition:.2s;
+}
+
+.song-link:hover{
+    transform:scale(1.01);
+    background:rgba(255,255,255,.08);
+}
+.slot-btn{
+    width:35px;
+    height:35px;
+    border:none;
+    border-radius:8px;
+    background:#374151;
+    color:#9ca3af;
+    cursor:pointer;
+    font-size:12px;
+    transition:.2s;
+}
+
+.slot-btn:hover{
+    background:#4b5563;
+    color:white;
+}
+</style>
+</head>
+<div id="previewModal" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+z-index:99999;
+overflow:auto;
+">
+
+<div style="
+position:sticky;
+top:0;
+padding:10px;
+background:#111827;
+text-align:right;
+">
+
+<button class="slot-btn" onclick="fecharPreview()">
+✕
+</button>
+
+</div>
+
+<div style="
+display:flex;
+justify-content:center;
+padding:15px;
+">
+
+<div id="previewContent"></div>
+
+</div>
+
+</div>
+<body>
+
+<div class="container">
+
+<!-- PAINEL -->
+<div class="panel">
+
+<h2>GERADOR DE REPERTÓRIO</h2>
+<div style="display:flex;gap:6px;margin-top:15px;">
+    <button class="slot-btn" onclick="carregarSlot(0)">1</button>
+    <button class="slot-btn" onclick="carregarSlot(1)">2</button>
+    <button class="slot-btn" onclick="carregarSlot(2)">3</button>
+    <button class="slot-btn" onclick="carregarSlot(3)">4</button>
+    <button class="slot-btn" onclick="carregarSlot(4)">5</button>
+
+    <button class="slot-btn" onclick="verCartaz()">🔍</button>
+</div>
+<label>Grupo</label>
+<select id="grupo">
+<option>G1</option>
+<option>G2</option>
+<option>G3</option>
+</select>
+
+<label>Dia</label>
+<input type="number" id="dia" placeholder="26">
+
+<label>Seção Extra</label>
+<input type="text" id="extraTitulo" placeholder="Avisos">
+
+<label>Conteúdo Extra</label>
+<textarea id="extraTexto"></textarea>
+
+<datalist id="musicasSalvas"></datalist>
+
+<!-- PRIMEIRA PARTE -->
+<button class="secao-btn" onclick="toggleSecao('primeiraSecao')">
+PRIMEIRA PARTE
+</button>
+
+<div class="secao-conteudo" id="primeiraSecao">
+    <div id="primeiraInputs"></div>
+
+    <button class="add-btn"
+    onclick="addMusica('primeiraInputs')">
+    + Música Primeira Parte
+    </button>
+</div>
+
+<!-- OFERTA -->
+<button class="secao-btn" onclick="toggleSecao('ofertaSecao')">
+OFERTA
+</button>
+
+<div class="secao-conteudo" id="ofertaSecao">
+    <div id="ofertaInputs"></div>
+
+    <button class="add-btn"
+    onclick="addMusica('ofertaInputs')">
+    + Música Oferta
+    </button>
+</div>
+
+<!-- ENTREGA -->
+<button class="secao-btn" onclick="toggleSecao('entregaSecao')">
+ENTREGA
+</button>
+
+<div class="secao-conteudo" id="entregaSecao">
+    <div id="entregaInputs"></div>
+
+    <button class="add-btn"
+    onclick="addMusica('entregaInputs')">
+    + Música Entrega
+    </button>
+</div>
+
+<!-- DISTRIBUIÇÃO DE CEIA -->
+<button class="secao-btn" onclick="toggleSecao('distribuicaoSecao')">
+DISTRIBUIÇÃO DE CEIA
+</button>
+
+<div class="secao-conteudo" id="distribuicaoSecao">
+    <div id="distribuicaoInputs"></div>
+
+    <button class="add-btn"
+    onclick="addMusica('distribuicaoInputs')">
+    + Música Distribuição
+    </button>
+</div>
+
+<!-- CEIA -->
+<button class="secao-btn" onclick="toggleSecao('ceiaSecao')">
+CEIA
+</button>
+
+<div class="secao-conteudo" id="ceiaSecao">
+    <div id="ceiaInputs"></div>
+
+    <button class="add-btn"
+    onclick="addMusica('ceiaInputs')">
+    + Música Ceia
+    </button>
+</div>
+
+<button class="add-btn" style="background:#7c3aed;margin-top:25px;" onclick="gerarCartaz()">
+GERAR CARTAZ
+</button>
+
+<div class="downloads">
+<button class="png" onclick="compartilharPNG()">Compartilhar PNG</button>
+<button class="pdf" onclick="compartilharPDF()">Compartilhar PDF</button>
+</div>
+
+</div>
+
+<!-- POSTER -->
+<div class="poster-area">
+
+<div class="poster" id="poster">
+
+<div class="poster-content">
+
+<div class="top">
+<div class="logo" id="posterGrupo">G1</div>
+
+<div>
+<div class="date-day" id="posterDia">26</div>
+<div id="posterData"></div>
+</div>
+</div>
+
+<div id="secaoPrimeira" style="display:none;">
+    <div class="section-title">PRIMEIRA PARTE</div>
+    <div id="posterPrimeira"></div>
+</div>
+
+<div id="secaoOferta" style="display:none;">
+    <div class="section-title">OFERTA</div>
+    <div id="posterOferta"></div>
+</div>
+
+<div id="secaoEntrega" style="display:none;">
+    <div class="section-title">ENTREGA</div>
+    <div id="posterEntrega"></div>
+</div>
+
+<div id="secaoDistribuicao" style="display:none;">
+    <div class="section-title">DISTRIBUIÇÃO DE CEIA</div>
+    <div id="posterDistribuicao"></div>
+</div>
+
+<div id="secaoCeia" style="display:none;">
+    <div class="section-title">CEIA</div>
+    <div id="posterCeia"></div>
+</div>
+
+<div class="extra" id="secaoExtra" style="display:none;">
+    <div id="posterExtraTitulo"></div>
+    <div id="posterExtraTexto"></div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const meses = ["JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO","DEZEMBRO"];
+
+function addMusica(secao){
+
+const div = document.createElement("div");
+
+div.className = "music-block";
+
+div.innerHTML = `
+<input class="nome" placeholder="Nome da Música" list="musicasSalvas">
+<input class="autor" placeholder="Autor">
+<input class="tom" placeholder="Tom">
+<input class="youtubeLink" placeholder="Link YouTube">
+`;
+
+document.getElementById(secao).appendChild(div);
+
+}
+
+addMusica('primeiraInputs');
+addMusica('ofertaInputs');
+addMusica('entregaInputs');
+addMusica('distribuicaoInputs');
+addMusica('ceiaInputs');
+
+function gerarCartaz(){
+
+const hoje = new Date();
+
+document.getElementById("posterGrupo").innerText =
+document.getElementById("grupo").value;
+
+document.getElementById("posterDia").innerText =
+document.getElementById("dia").value || hoje.getDate();
+
+document.getElementById("posterData").innerText =
+meses[hoje.getMonth()] + " " + hoje.getFullYear();
+
+gerarSecao(
+    "primeiraInputs",
+    "posterPrimeira",
+    "secaoPrimeira"
+);
+
+gerarSecao(
+    "ofertaInputs",
+    "posterOferta",
+    "secaoOferta"
+);
+
+gerarSecao(
+    "entregaInputs",
+    "posterEntrega",
+    "secaoEntrega"
+);
+
+gerarSecao(
+    "distribuicaoInputs",
+    "posterDistribuicao",
+    "secaoDistribuicao"
+);
+
+gerarSecao(
+    "ceiaInputs",
+    "posterCeia",
+    "secaoCeia"
+);
+
+const extraTitulo =
+    document.getElementById("extraTitulo").value;
+
+const extraTexto =
+    document.getElementById("extraTexto").value;
+
+document.getElementById("posterExtraTitulo").innerText =
+    extraTitulo;
+
+document.getElementById("posterExtraTexto").innerText =
+    extraTexto;
+
+document.getElementById("secaoExtra").style.display =
+    (extraTitulo.trim() || extraTexto.trim())
+    ? "block"
+    : "none";
+
+salvarRepertorioAtual();
+
+}
+
+function toggleSecao(id){
+
+    const secao =
+        document.getElementById(id);
+
+    if(secao.style.display === "block"){
+
+        secao.style.display = "none";
+
+    }else{
+
+        secao.style.display = "block";
+
+    }
+
+}
+
+function verCartaz(){
+
+    atualizarPoster();
+
+    const original =
+        document.getElementById("poster");
+
+    const clone =
+        original.cloneNode(true);
+
+    clone.id = "posterPreview";
+
+    document.getElementById("previewContent").innerHTML = "";
+
+    document.getElementById("previewContent")
+        .appendChild(clone);
+
+    document.getElementById("previewModal").style.display =
+        "block";
+}
+
+function fecharPreview(){
+
+    document.getElementById("previewModal").style.display =
+        "none";
+}
+function gerarSecao(inputId, posterId, secaoId){
+
+    const inputs =
+        document.querySelectorAll(`#${inputId} .music-block`);
+
+    const poster =
+        document.getElementById(posterId);
+
+    const secao =
+        document.getElementById(secaoId);
+
+    poster.innerHTML = "";
+
+    let possuiMusica = false;
+
+    inputs.forEach(item => {
+
+        const nome =
+            item.querySelector(".nome").value;
+
+        const autor =
+            item.querySelector(".autor").value;
+
+        const tom =
+            item.querySelector(".tom").value;
+
+        const link =
+            item.querySelector(".youtubeLink").value;
+
+        if(nome.trim() !== ""){
+
+            possuiMusica = true;
+
+            salvarMusica({
+                nome,
+                autor,
+                tom,
+                youtube: link
+            });
+
+            poster.innerHTML += `
+            ${link ? `
+            <a class="song song-link" href="${link}" target="_blank">
+            ` : `
+            <div class="song">
+            `}
+
+            <div class="song-name">${nome}</div>
+
+            <div class="song-meta">
+                ${autor} • Tom ${tom}
+            </div>
+
+            ${link ? `
+            <div class="yt-icon">▶</div>
+            ` : ""}
+
+            ${link ? `</a>` : `</div>`}
+            `;
+        }
+
+    });
+
+    secao.style.display =
+        possuiMusica ? "block" : "none";
+}
+
+async function compartilharPNG(){
+
+    const grupo = document.getElementById("grupo").value;
+    const dia = document.getElementById("dia").value || new Date().getDate();
+    const nomeArquivo = `${grupo} repertorio dia ${dia}.png`;
+
+    const element =
+    document.querySelector(".poster-area #poster");
+    const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: null
+    });
+
+    canvas.toBlob(async (blob) => {
+
+        const file = new File([blob], nomeArquivo, { type: "image/png" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+
+            await navigator.share({
+                title: "Repertório",
+                text: "Confira o repertório",
+                files: [file]
+            });
+
+        } else {
+
+            const link = document.createElement("a");
+            link.download = nomeArquivo;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+
+    }, "image/png");
+}
+async function compartilharPDF() {
+
+    const grupo = document.getElementById("grupo").value;
+    const dia = document.getElementById("dia").value || new Date().getDate();
+    const nomeArquivo = `${grupo} repertorio dia ${dia}.pdf`;
+
+    const element =
+    document.querySelector(".poster-area #poster");
+
+    const opt = {
+        margin: 0,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: {
+            scale: 3,
+            useCORS: true,
+            scrollY: 0,
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight
+        },
+        jsPDF: {
+            unit: 'px',
+            format: [900, element.scrollHeight],
+            orientation: 'portrait'
+        }
+    };
+
+    const worker = html2pdf().set(opt).from(element).toPdf();
+
+    const pdf = await worker.get("pdf");
+    const blob = pdf.output("blob");
+
+    const file = new File([blob], nomeArquivo, { type: "application/pdf" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+
+        await navigator.share({
+            title: "Repertório",
+            text: "Confira o repertório em PDF",
+            files: [file]
+        });
+
+    } else {
+
+        pdf.save(nomeArquivo);
+    }
+}
+function baixarPDF(){
+
+    const grupo = document.getElementById("grupo").value;
+    const dia = document.getElementById("dia").value || new Date().getDate();
+
+    const element = document.getElementById("poster");
+
+    const opt = {
+        margin: 0,
+        filename: `${grupo}repertorio dia ${dia}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: {
+            scale: 3,
+            useCORS: true,
+            scrollY: 0,
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight
+        },
+        jsPDF: {
+            unit: 'px',
+            format: [900, element.scrollHeight], // <- chave do problema resolvida aqui
+            orientation: 'portrait'
+        }
+    };
+
+    html2pdf().set(opt).from(element).save();
+}
+// ==========================
+// BIBLIOTECA DE MUSICAS
+// ==========================
+
+function pegarBiblioteca(){
+
+    return JSON.parse(
+        localStorage.getItem("bibliotecaMusicas")
+    ) || [];
+
+}
+
+function salvarBiblioteca(lista){
+
+    localStorage.setItem(
+        "bibliotecaMusicas",
+        JSON.stringify(lista)
+    );
+
+}
+
+function atualizarDatalist(){
+
+    const datalist =
+        document.getElementById("musicasSalvas");
+
+    const biblioteca = pegarBiblioteca();
+
+    datalist.innerHTML = "";
+
+    biblioteca.forEach(musica => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = musica.nome;
+
+        option.label =
+            musica.nome + " - " + musica.autor;
+
+        datalist.appendChild(option);
+
+    });
+
+}
+
+function salvarMusica(musica){
+
+    let biblioteca = pegarBiblioteca();
+
+    const existe = biblioteca.find(m =>
+        m.nome.toLowerCase() ===
+        musica.nome.toLowerCase()
+    );
+
+    if(!existe){
+
+        biblioteca.push(musica);
+
+        salvarBiblioteca(biblioteca);
+
+        atualizarDatalist();
+
+    }
+
+}
+
+// ==========================
+// AUTOCOMPLETE
+// ==========================
+
+document.addEventListener("input", function(e){
+
+    if(e.target.classList.contains("nome")){
+
+        const nomeDigitado =
+            e.target.value;
+
+        const biblioteca =
+            pegarBiblioteca();
+
+        const musica = biblioteca.find(m =>
+            m.nome.toLowerCase() ===
+            nomeDigitado.toLowerCase()
+        );
+
+        if(musica){
+
+            const bloco =
+                e.target.closest(".music-block");
+
+            bloco.querySelector(".autor").value =
+                musica.autor;
+
+            bloco.querySelector(".tom").value =
+                musica.tom;
+
+            bloco.querySelector(".youtubeLink").value =
+                musica.youtube;
+
+        }
+
+    }
+
+});
+
+// ==========================
+// CARREGAR AO ABRIR
+// ==========================
+
+atualizarDatalist();
+// ======================
+// REPERTÓRIOS AUTOMÁTICOS
+// ======================
+
+function pegarSlots(){
+    return JSON.parse(
+        localStorage.getItem("repertoriosSalvos")
+    ) || [];
+}
+
+function salvarSlots(lista){
+    localStorage.setItem(
+        "repertoriosSalvos",
+        JSON.stringify(lista)
+    );
+}
+
+function salvarRepertorioAtual(){
+
+    const repertorio = {
+    grupo: document.getElementById("grupo").value,
+    dia: document.getElementById("dia").value,
+    extraTitulo: document.getElementById("extraTitulo").value,
+    extraTexto: document.getElementById("extraTexto").value,
+
+    primeira: coletarMusicas("primeiraInputs"),
+    oferta: coletarMusicas("ofertaInputs"),
+    entrega: coletarMusicas("entregaInputs"),
+    distribuicao: coletarMusicas("distribuicaoInputs"),
+    ceia: coletarMusicas("ceiaInputs")
+};
+
+    let slots = pegarSlots();
+
+    slots.push(repertorio);
+
+    // mantém apenas os últimos 5
+if(slots.length > 5){
+    slots.shift();
+}
+
+    salvarSlots(slots);
+}
+console.log("Salvou repertório");
+function coletarMusicas(secao){
+
+    const lista = [];
+
+    document
+    .querySelectorAll(`#${secao} .music-block`)
+    .forEach(item => {
+
+        lista.push({
+            nome: item.querySelector(".nome").value,
+            autor: item.querySelector(".autor").value,
+            tom: item.querySelector(".tom").value,
+            youtube: item.querySelector(".youtubeLink").value
+        });
+
+    });
+
+    return lista;
+}
+
+function carregarSlot(indice){
+
+    const slots = pegarSlots();
+
+    if(!slots[indice]) return;
+
+    const r = slots[indice];
+
+    document.getElementById("grupo").value = r.grupo;
+    document.getElementById("dia").value = r.dia;
+    document.getElementById("extraTitulo").value = r.extraTitulo;
+    document.getElementById("extraTexto").value = r.extraTexto;
+
+    carregarMusicas("primeiraInputs", r.primeira);
+carregarMusicas("ofertaInputs", r.oferta);
+carregarMusicas("entregaInputs", r.entrega);
+carregarMusicas("distribuicaoInputs", r.distribuicao || []);
+carregarMusicas("ceiaInputs", r.ceia || []);
+
+gerarCartaz();
+}
+
+function atualizarPoster(){
+
+    const hoje = new Date();
+
+    document.getElementById("posterGrupo").innerText =
+        document.getElementById("grupo").value;
+
+    document.getElementById("posterDia").innerText =
+        document.getElementById("dia").value || hoje.getDate();
+
+    document.getElementById("posterData").innerText =
+        meses[hoje.getMonth()] + " " + hoje.getFullYear();
+
+    gerarSecao(
+        "primeiraInputs",
+        "posterPrimeira",
+        "secaoPrimeira"
+    );
+
+    gerarSecao(
+        "ofertaInputs",
+        "posterOferta",
+        "secaoOferta"
+    );
+
+    gerarSecao(
+        "entregaInputs",
+        "posterEntrega",
+        "secaoEntrega"
+    );
+
+    gerarSecao(
+        "distribuicaoInputs",
+        "posterDistribuicao",
+        "secaoDistribuicao"
+    );
+
+    gerarSecao(
+        "ceiaInputs",
+        "posterCeia",
+        "secaoCeia"
+    );
+
+    document.getElementById("posterExtraTitulo").innerText =
+        document.getElementById("extraTitulo").value || "EXTRA";
+
+    document.getElementById("posterExtraTexto").innerText =
+        document.getElementById("extraTexto").value;
+
+    document.getElementById("secaoExtra").style.display =
+        (
+            document.getElementById("extraTitulo").value.trim() ||
+            document.getElementById("extraTexto").value.trim()
+        )
+        ? "block"
+        : "none";
+}
+function carregarMusicas(secao, lista){
+
+    const container =
+        document.getElementById(secao);
+
+    container.innerHTML = "";
+
+    lista.forEach(m => {
+
+        addMusica(secao);
+
+        const ultimo =
+            container.lastElementChild;
+
+        ultimo.querySelector(".nome").value =
+            m.nome || "";
+
+        ultimo.querySelector(".autor").value =
+            m.autor || "";
+
+        ultimo.querySelector(".tom").value =
+            m.tom || "";
+
+        ultimo.querySelector(".youtubeLink").value =
+            m.youtube || "";
+
+    });
+
+}
+
+</script>
+<button id="btnInstall" style="display:none;">📲 Instalar App</button>
+<script>
+let deferredPrompt;
+const btnInstall = document.getElementById("btnInstall");
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  btnInstall.style.display = "block"; // mostra o botão
+});
+
+btnInstall.addEventListener("click", async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log("Resultado da instalação:", outcome);
+    deferredPrompt = null;
+    btnInstall.style.display = "none";
+  }
+});
+
+// Registrar o Service Worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+</body>
+</html>
