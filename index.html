@@ -295,7 +295,79 @@ textarea{
     background:#4b5563;
     color:white;
 }
+/* BOTÕES FLUTUANTES */
+
+.floating-buttons{
+    position:fixed;
+    right:15px;
+    bottom:15px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    z-index:9999;
+}
+
+.float-btn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    color:white;
+    cursor:pointer;
+    font-weight:700;
+    font-size:14px;
+    transition:.2s;
+    box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+
+.float-btn:hover{
+    transform:scale(1.08);
+    background:rgba(255,255,255,.16);
+}
+
+/* MODAL QR */
+
+.qr-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    z-index:99999;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.qr-box{
+    position:relative;
+    background:#111827;
+    padding:15px;
+    border-radius:20px;
+}
+
+.qr-box img{
+    width:280px;
+    max-width:100%;
+    border-radius:12px;
+}
+
+.fechar-qr{
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    width:35px;
+    height:35px;
+    border:none;
+    border-radius:50%;
+    background:#dc2626;
+    color:white;
+    cursor:pointer;
+    font-weight:700;
+}
 </style>
+
 </head>
 <div id="previewModal" style="
 display:none;
@@ -332,6 +404,38 @@ padding:15px;
 <div id="previewContent"></div>
 
 </div>
+
+</div>
+<!-- BOTÕES FLUTUANTES -->
+<div class="floating-buttons">
+
+    <!-- QR CODE -->
+    <button class="float-btn" onclick="abrirQR()" title="QR Code">
+        QR
+    </button>
+
+    <!-- COMPARTILHAR -->
+    <button class="float-btn" onclick="compartilharSite()" title="Compartilhar">
+        ↗
+    </button>
+
+</div>
+
+<!-- MODAL QR -->
+<div id="qrModal" class="qr-modal">
+
+    <div class="qr-box">
+
+        <button class="fechar-qr" onclick="fecharQR()">
+            ✕
+        </button>
+
+        <img
+            src="https://i.imgur.com/IiF8Z1r.jpeg"
+            alt="QR Code"
+        >
+
+    </div>
 
 </div>
 <body>
@@ -575,6 +679,46 @@ async function baixarPNG(){
 
 }
 
+function abrirQR(){
+
+    document.getElementById("qrModal").style.display =
+        "flex";
+
+}
+
+function fecharQR(){
+
+    document.getElementById("qrModal").style.display =
+        "none";
+
+}
+
+async function compartilharSite(){
+
+    const url =
+        "https://meusaplicativoscom-pixel.github.io/repertorio-avv/";
+
+    if(navigator.share){
+
+        try{
+
+            await navigator.share({
+                title:"Gerador de Repertório",
+                text:"Confira o aplicativo",
+                url:url
+            });
+
+        }catch(e){}
+
+    }else{
+
+        navigator.clipboard.writeText(url);
+
+        alert("Link copiado!");
+
+    }
+
+}
 function gerarCartaz(){
 
 const hoje = new Date();
