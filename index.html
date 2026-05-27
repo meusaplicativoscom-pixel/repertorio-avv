@@ -88,7 +88,7 @@
 .poster{
     width:900px;
     min-height:1300px;
-    background: radial-gradient(circle at top,#facc15,#0f172a 60%);
+    background:radial-gradient(circle at top,#1e3a8a,#0f172a 60%);
     border-radius:30px;
     overflow:hidden; /* <- MUITO IMPORTANTE */
 }
@@ -192,7 +192,7 @@ textarea{
 .poster{
     width:900px;
     min-height:1300px;
-   background: radial-gradient(circle at top,#facc15,#0f172a 60%);
+    background:radial-gradient(circle at top,#7c3aed,#2e1065 60%);
     border-radius:30px;
     overflow:hidden;
 }
@@ -341,7 +341,7 @@ padding:15px;
 <!-- PAINEL -->
 <div class="panel">
 
-<h2>REPERTÓRIO AVV NATAL</h2>
+<h2>Repertório AVV Natal</h2>
 <div style="display:flex;gap:6px;margin-top:15px;">
     <button class="slot-btn" onclick="carregarSlot(0)">1</button>
     <button class="slot-btn" onclick="carregarSlot(1)">2</button>
@@ -699,7 +699,8 @@ function gerarSecao(inputId, posterId, secaoId){
 
     });
 
-    secao.style.display = "block";
+    secao.style.display =
+        possuiMusica ? "block" : "none";
 }
 
 async function compartilharPNG(){
@@ -710,9 +711,6 @@ async function compartilharPNG(){
 
     const element =
     document.querySelector(".poster-area #poster");
-    document.querySelectorAll(".secao-conteudo").forEach(el => {
-    el.style.display = "block";
-});
     const canvas = await html2canvas(element, {
         scale: 3,
         useCORS: true,
