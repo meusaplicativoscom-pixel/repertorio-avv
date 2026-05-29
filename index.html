@@ -1,4 +1,5 @@
 
+
   
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -1293,29 +1294,95 @@ function carregarMusicas(secao, lista){
 }
 
 </script>
-<button id="btnInstall" style="display:none;">📲 Instalar App</button>
+<style>
+#btnInstall {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+
+  border: none;
+  border-radius: 50px;
+  padding: 14px 20px;
+
+  background: #000;
+  color: #fff;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+
+  cursor: pointer;
+
+  display: none;
+
+  transition: all .3s ease;
+}
+
+#btnInstall:hover {
+  transform: scale(1.05);
+}
+</style>
+
+<button id="btnInstall">📲 Instalar App</button>
+
 <script>
 let deferredPrompt;
+
 const btnInstall = document.getElementById("btnInstall");
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  btnInstall.style.display = "block"; // mostra o botão
-});
 
+// Verifica se já está instalado
+function isAppInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+}
+
+// Se não estiver instalado
+if (!isAppInstalled()) {
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    btnInstall.style.display = "block";
+  });
+
+}
+
+// Clique no botão
 btnInstall.addEventListener("click", async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log("Resultado da instalação:", outcome);
-    deferredPrompt = null;
-    btnInstall.style.display = "none";
-  }
+
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+
+  const { outcome } = await deferredPrompt.userChoice;
+
+  console.log("Resultado:", outcome);
+
+  deferredPrompt = null;
+
+  btnInstall.style.display = "none";
 });
 
-// Registrar o Service Worker
+// Quando instalar
+window.addEventListener("appinstalled", () => {
+
+  console.log("PWA instalado");
+
+  btnInstall.style.display = "none";
+});
+
+// Registrar Service Worker
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
+
+  navigator.serviceWorker.register("./service-worker.js")
+    .then(() => console.log("SW registrado"))
+    .catch((err) => console.log("Erro SW:", err));
+
 }
 </script>
 </body>
